@@ -44,10 +44,6 @@ module AutomateApi
         endpoints.has_key?(endpoint)
         end
 
-        def build(data)
-          self.new(data)
-        end
-
         def create(data)
           raise QueryNotSupported.new(:create, self) unless supports?(:create)
           self.new(data).create
