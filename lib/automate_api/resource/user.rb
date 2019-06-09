@@ -5,8 +5,8 @@ module AutomateApi
       queries all: { path: 'users', collect: 'users' },
               fetch: { path: 'users/{{username}}' },
               create: { path: 'users', method: 'post' },
-              destroy: { path: 'users/{{username}}', collect: 'user', method: 'delete' }
-              # update: { path: 'users/{{username}}', collect: 'user', method: 'put' }
+              destroy: { path: 'users/{{username}}', collect: 'user', method: 'delete' },
+              update: { path: 'users/{{username}}', collect: 'user', method: 'put' }
     end
   end
 end

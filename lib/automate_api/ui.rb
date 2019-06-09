@@ -1,5 +1,5 @@
 module AutomateApi
-  module UI
+  module Output
     def self.included(base)
       base.extend ClassMethods
     end
@@ -10,6 +10,10 @@ module AutomateApi
 
     def debug(*args)
       self.class.debug(*args)
+    end
+
+    def error(*args)
+      self.class.error(*args)
     end
 
     module ClassMethods
@@ -24,6 +28,10 @@ module AutomateApi
       def debug(*msg)
         return unless AutomateApi::Config.debug
         display 'debug', *msg
+      end
+
+      def error(*msg)
+        display 'error', *msg
       end
 
       def display(type, *msg)

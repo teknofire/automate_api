@@ -3,24 +3,28 @@ require 'httparty'
 module AutomateApi
   class Client
     include HTTParty
-    include AutomateApi::UI
+    include AutomateApi::Output
     base_uri AutomateApi::Config.automate_url
 
     def initialize
 
     end
 
+    def logger
+      AutomateApi.logger
+    end
+
     def api_exec(method, path, options = {})
       opts = request_options(options)
       request = self.class.send(method.to_sym, path, opts)
 
-      debug <<~EOF
+      logger.debug <<~EOF
         API Request:
           Path: #{path}
           Method: #{method}
           Options: #{opts.inspect}
         API Response:
-          Status: #{request.code} #{request.response.message}
+          Status: #{request.code} #{request.message}
           Data: #{request.parsed_response}
       EOF
 

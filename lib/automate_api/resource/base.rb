@@ -6,6 +6,7 @@ module AutomateApi
       property :path
       property :collect
       property :method, default: :get
+      property :klass, default: nil
 
       def body?
         [:post, :put].include?(method)
@@ -13,8 +14,6 @@ module AutomateApi
     end
 
     class Base
-      include AutomateApi::UI
-
       attr_reader :attributes
       def initialize(data)
         @attributes = Hashie::Mash.new(data)
@@ -96,9 +95,9 @@ module AutomateApi
           response = AutomateApi.client.api_exec(query.method, url, request_options)
 
           if response.collectable?(query.collect)
-            coerce response[query.collect]
+            coerce response[query.collect], query.klass || self
           else
-            coerce response
+            coerce response, query.klass || self
           end
         end
 
@@ -110,13 +109,21 @@ module AutomateApi
           end
         end
 
-        def coerce(data)
+        def coerce(data, klass)
           if data.is_a?(Array)
             data.map do |item|
-              self.new(item)
+              klass.initialize_or_find(item)
             end
           else
+            klass.initialize_or_find(data)
+          end
+        end
+
+        def initialize_or_find(data)
+          if data.is_a?(Hash)
             self.new(data)
+          else
+            self.fetch(id: data)
           end
         end
       end

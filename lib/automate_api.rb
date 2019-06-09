@@ -25,6 +25,7 @@ end
 require "automate_api/client"
 require "automate_api/resource/base"
 require "automate_api/resource/user"
+require "automate_api/resource/team"
 
 module AutomateApi
   class Error < StandardError; end
@@ -34,8 +35,19 @@ module AutomateApi
       super "Undefined api query '#{query}' for #{klass}.queries"
     end
   end
+  class Logger
+    include AutomateApi::Output
+  end
 
   def self.client
     @client ||= Client.new
+  end
+
+  def self.logger
+    @logger ||= AutomateApi::Logger
+  end
+
+  def self.logger=(value)
+    @logger = value
   end
 end
