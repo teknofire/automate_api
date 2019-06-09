@@ -1,13 +1,6 @@
 require 'automate_api'
 
 describe AutomateApi::Client do
-  before do
-    AutomateApi::Config.reset
-    AutomateApi::Config.ssl_verify = false
-    AutomateApi::Config.automate_url = 'https://test.test'
-    AutomateApi::Config.auth_token = 'test_token'
-  end
-
   context 'defaults' do
     let(:client) { AutomateApi::Client.new }
     let(:response) do
