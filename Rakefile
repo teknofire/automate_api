@@ -14,5 +14,8 @@ task :examples do
     puts "Loading #{file}"
     puts '*' * 80
     require file
+    
+    # Add blank line
+    puts ""
   end
 end

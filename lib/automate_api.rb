@@ -6,31 +6,11 @@ require "automate_api/config"
 require "automate_api/helpers"
 require "automate_api/output"
 
-config_loaded = false
-configs = %w{ ./.a2_cli.rb ~/.a2_cli.rb }
-
-configs.each do |config|
-  config = File.expand_path(config)
-  if File.exist?(config)
-    AutomateApi::Config.from_file(config)
-    config_loaded = true
-    break
-  end
-end
-
-if !config_loaded
-  # A2::UI.warn "Could not find any config files, using defaults. (Tried: #{configs.join(', ')})"
-end
 
 require "automate_api/client"
 require "automate_api/resource/endpoint"
 require "automate_api/resource/attributes"
 require "automate_api/resource/base"
-require "automate_api/models/user"
-require "automate_api/models/team"
-require "automate_api/models/token"
-require "automate_api/models/compliance_profile"
-
 
 module AutomateApi
   class Error < StandardError; end
@@ -55,4 +35,37 @@ module AutomateApi
   def self.logger=(value)
     @logger = value
   end
+
+  def self.configure(config = nil)
+    config_loaded = false
+
+    if config.nil?
+      configs = %w{ ./.a2_cli.rb ~/.a2_cli.rb }
+    else
+      configs = [config]
+    end
+
+    configs.each do |config|
+      config = File.expand_path(config)
+      if File.exist?(config)
+        AutomateApi::Config.from_file(config)
+        config_loaded = true
+        break
+      end
+    end
+
+    if !config_loaded
+      logger.warn "Could not find any config files, using defaults. (Tried: #{configs.join(', ')})"
+    end
+
+    # Tell the client to reload it's configs
+    client.reload
+  end
 end
+
+require "automate_api/models/user"
+require "automate_api/models/team"
+require "automate_api/models/token"
+require "automate_api/models/compliance_profile"
+
+AutomateApi.configure
