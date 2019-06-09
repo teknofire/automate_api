@@ -15,6 +15,33 @@ describe AutomateApi::Resource::Base do
                 foo: { path: 'foo', method: :post }
     end
 
+    let(:success_response) {
+      response = double
+      allow(response).to receive(:success?).and_return(true)
+      allow(response).to receive(:code).and_return(200)
+      allow(response).to receive(:message).and_return('OK')
+      allow(response).to receive(:parsed_response).and_return({ name: 'test '})
+      response
+    }
+
+    let(:fail_response) {
+      response = double
+      allow(response).to receive(:success?).and_return(false)
+      allow(response).to receive(:code).and_return(400)
+      allow(response).to receive(:message).and_return('Already exists')
+      allow(response).to receive(:parsed_response).and_return({ error: 'Test already exists' })
+      response
+    }
+    let(:request_opts) do
+      {
+        headers: {
+          "api-token"=>"test_token",
+          "content-type"=>"application/json"
+        },
+        verify: false
+      }
+    end
+
     it 'should set the attributes on new' do
       tr = TestResource.new({ name: 'test' })
 
@@ -30,6 +57,25 @@ describe AutomateApi::Resource::Base do
         expect(TestResource.supports?(:delete)).to eq false
       end
 
+      it 'should not raise error on method_missing request' do
+        expect(TestResource).to receive(:method_missing)
+          .with(:foo).and_call_original
+
+        expect(AutomateApi::Client).to receive(:post)
+          .with('/api/v0/foo', request_opts).and_return(success_response)
+
+        expect{ TestResource.foo }.to_not raise_error
+      end
+
+      it 'should raise error on method_missing request' do
+        expect(TestResource).to receive(:method_missing)
+          .with(:foo).and_call_original
+
+        expect(AutomateApi::Client).to receive(:post)
+          .with('/api/v0/foo', request_opts).and_return(fail_response)
+
+        expect{ TestResource.foo }.to raise_error(AutomateApi::RequestError)
+      end
     end
 
     context 'instance methods' do
@@ -45,33 +91,6 @@ describe AutomateApi::Resource::Base do
 
       it 'should raise error on update' do
         expect{ instance.update }.to raise_error AutomateApi::EndpointNotSupported
-      end
-
-      let(:success_response) {
-        response = double
-        allow(response).to receive(:success?).and_return(true)
-        allow(response).to receive(:code).and_return(200)
-        allow(response).to receive(:message).and_return('OK')
-        allow(response).to receive(:parsed_response).and_return({ name: 'test '})
-        response
-      }
-
-      let(:fail_response) {
-        response = double
-        allow(response).to receive(:success?).and_return(false)
-        allow(response).to receive(:code).and_return(400)
-        allow(response).to receive(:message).and_return('Already exists')
-        allow(response).to receive(:parsed_response).and_return({ error: 'Test already exists' })
-        response
-      }
-      let(:request_opts) do
-        {
-          headers: {
-            "api-token"=>"test_token",
-            "content-type"=>"application/json"
-          },
-          verify: false
-        }
       end
 
       it 'should not raise error on successful create' do
@@ -103,8 +122,15 @@ describe AutomateApi::Resource::Base do
         expect(AutomateApi::Client).to receive(:post)
           .with('/api/v0/foo', opts).and_return(fail_response)
 
-        # instance.foo
         expect{ instance.foo }.to raise_error(AutomateApi::RequestError)
+      end
+
+      it 'should return the value of an attribute' do
+        expect(instance.name).to eq 'test'
+      end
+
+      it 'should raise method not found error' do
+        expect{ instance.no_method_name }.to raise_error(NoMethodError)
       end
     end
 

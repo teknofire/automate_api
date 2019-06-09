@@ -5,10 +5,6 @@ module AutomateApi
       property :collect
       property :method, default: :get
       property :klass, default: nil
-
-      def body?
-        [:post, :put].include?(method)
-      end
     end
   end
 end
