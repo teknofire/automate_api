@@ -15,12 +15,10 @@ module AutomateApi
 
       def update(options = {})
         supports!(:update)
-
         _api_request(self.class.endpoint('update'), options)
       end
 
       def _api_request(endpoint, options = {})
-        options[:body] = attributes.to_json
         response = self.class._api_request(endpoint, attributes, options)
 
         @attributes = response.attributes if response.respond_to?(:attributes)
@@ -40,11 +38,6 @@ module AutomateApi
       end
 
       class << self
-        def create(data)
-          raise QueryNotSupported.new(:create, self) unless supports?(:create)
-          self.new(data).create
-        end
-
         def base_resource_url
           "/api/#{api_version}"
         end
@@ -62,6 +55,10 @@ module AutomateApi
         def _api_request(endpoint, data = {}, request_options = {})
           path = Mustache.render(endpoint.path, data)
           url = [base_resource_url, path].join('/')
+
+          if !data.keys.empty? && [:post, :put].include?(endpoint.method.to_sym)
+            request_options[:body] = data.to_json
+          end
 
           response = AutomateApi.client.api_exec(endpoint.method, url, request_options)
 

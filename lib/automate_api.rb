@@ -29,6 +29,8 @@ require "automate_api/resource/base"
 require "automate_api/models/user"
 require "automate_api/models/team"
 require "automate_api/models/token"
+require "automate_api/models/compliance_profile"
+
 
 module AutomateApi
   class Error < StandardError; end
