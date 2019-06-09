@@ -1,6 +1,6 @@
 require 'automate_api'
 
-describe AutomateApi::Logger do
+describe AutomateApi::Output do
   context 'default' do
     it 'should not print debug' do
       expect { AutomateApi::Logger.debug('test') }.to_not output(/test/).to_stdout
@@ -23,6 +23,10 @@ describe AutomateApi::Logger do
     it 'should print debug' do
       AutomateApi::Config.debug = true
       expect { AutomateApi::Logger.debug('test') }.to output(/test/).to_stdout
+    end
+
+    it 'should find a logger on root module' do
+      expect { AutomateApi.logger.error('test error output') }.to output(/test error output/).to_stdout
     end
   end
 end

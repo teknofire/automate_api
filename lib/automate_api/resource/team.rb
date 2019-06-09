@@ -9,10 +9,10 @@ module AutomateApi
     class Team < AutomateApi::Resource::Base
       fields :id, :name, :username, :email, :password
       endpoints all: { path: 'auth/teams', collect: 'teams' },
-                fetch: { path: 'auth/teams/{{username}}' },
-                create: { path: 'auth/teams', method: 'post' },
-                destroy: { path: 'auth/teams/{{id}}', collect: 'user', method: 'delete' },
-                update: { path: 'auth/teams/{{id}}', collect: 'user', method: 'put' },
+                fetch: { path: 'auth/teams/{{id}}' },
+                create: { path: 'auth/teams', collect: 'team', method: 'post' },
+                destroy: { path: 'auth/teams/{{id}}', collect: 'team', method: 'delete' },
+                update: { path: 'auth/teams/{{id}}', collect: 'team', method: 'put' },
                 users: { path: 'auth/teams/{{id}}/users', collect: 'user_ids', method: 'get', klass: AutomateApi::Resource::TeamUsers }
     end
   end

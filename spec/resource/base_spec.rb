@@ -12,7 +12,9 @@ describe AutomateApi::Resource::Base do
   context 'default' do
     class TestResource < AutomateApi::Resource::Base
       endpoints create: { path: 'test', method: :post },
-                foo: { path: 'foo', method: :post }
+                foo: { path: 'foo', method: :post },
+                all: { path: 'all', collect: 'all' },
+                find: { path: 'find/{{id}}', alias: :fetch }
     end
 
     let(:success_response) {
@@ -20,7 +22,7 @@ describe AutomateApi::Resource::Base do
       allow(response).to receive(:success?).and_return(true)
       allow(response).to receive(:code).and_return(200)
       allow(response).to receive(:message).and_return('OK')
-      allow(response).to receive(:parsed_response).and_return({ name: 'test '})
+      allow(response).to receive(:parsed_response).and_return({ name: 'test'})
       response
     }
 
@@ -76,6 +78,49 @@ describe AutomateApi::Resource::Base do
 
         expect{ TestResource.foo }.to raise_error(AutomateApi::RequestError)
       end
+
+      it 'should raise method not found error' do
+        expect{ TestResource.no_method_name }.to raise_error(NoMethodError)
+      end
+
+      it 'should create a new reource' do
+        opts = request_opts.merge(body: { name: 'box' }.to_json)
+
+        expect(AutomateApi::Client).to receive(:post)
+          .with('/api/v0/test', opts).and_return(success_response)
+
+        test = TestResource.create({ name: 'box' })
+        expect(test).to be_a TestResource
+      end
+
+      it 'should try to fetch data' do
+        expect(AutomateApi::Client).to receive(:get)
+          .with('/api/v0/find/box', request_opts).and_return(success_response)
+
+        test = TestResource.initialize_or_find('box')
+        expect(test).to be_a(TestResource)
+        expect(test.attributes).to eq({ 'name' => 'test' })
+      end
+
+      let(:multi_response) {
+        response = double
+        allow(response).to receive(:success?).and_return(true)
+        allow(response).to receive(:code).and_return(200)
+        allow(response).to receive(:message).and_return('OK')
+        allow(response).to receive(:parsed_response)
+          .and_return({ all: [{ name: 'test1'}, { name: 'test2' }] })
+
+        response
+      }
+
+      it 'should fetch multiple results' do
+        expect(AutomateApi::Client).to receive(:get)
+          .with('/api/v0/all', request_opts).and_return(multi_response)
+
+        results = TestResource.all
+
+        expect(results.count).to eq 2
+      end
     end
 
     context 'instance methods' do
@@ -90,7 +135,7 @@ describe AutomateApi::Resource::Base do
       end
 
       it 'should raise error on update' do
-        expect{ instance.update }.to raise_error AutomateApi::EndpointNotSupported
+        expect{ instance.update }.to raise_error AutomateApi::Resource::EndpointNotSupported
       end
 
       it 'should not raise error on successful create' do

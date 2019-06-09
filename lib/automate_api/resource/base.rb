@@ -2,32 +2,36 @@ module AutomateApi
   module Resource
     class Base
       attr_reader :attributes
+      include AutomateApi::Resource::EndpointAddon
+
       def initialize(data)
         @attributes = Hashie::Mash.new(data)
       end
 
       def create(options = {})
-        raise EndpointNotSupported.new(:create, self.class) unless supports?(:create)
-        _api_request(self.class.endpoints['create'], options)
+        supports!(:create)
+        _api_request(self.class.endpoint('create'), options)
       end
 
       def update(options = {})
-        raise EndpointNotSupported.new(:update, self.class) unless supports?(:update)
-        _api_request(self.class.endpoints['update'], options)
+        supports!(:update)
+
+        _api_request(self.class.endpoint('update'), options)
       end
 
       def _api_request(endpoint, options = {})
         options[:body] = attributes.to_json
         response = self.class._api_request(endpoint, attributes, options)
 
-        @attributes = response.attributes
-        self
+        @attributes = response.attributes if response.respond_to?(:attributes)
+
+        response
       end
 
       def method_missing(name, *args)
         if supports?(name)
           options = args.extract_options!
-          _api_request(self.class.endpoints[name], options)
+          _api_request(self.class.endpoint(name), options)
         elsif attributes.respond_to?(name)
           attributes.send(name, *args)
         else
@@ -35,15 +39,7 @@ module AutomateApi
         end
       end
 
-      def supports?(endpoint)
-        self.class.supports?(endpoint)
-      end
-
       class << self
-        def supports?(endpoint)
-        endpoints.has_key?(endpoint)
-        end
-
         def create(data)
           raise QueryNotSupported.new(:create, self) unless supports?(:create)
           self.new(data).create
@@ -63,16 +59,6 @@ module AutomateApi
           @fields
         end
 
-        def endpoints(args = nil)
-          @endpoints ||= Hashie::Mash.new
-
-          args.each_pair do |name, config|
-            @endpoints[name] = Endpoint.new(config)
-          end unless args.nil?
-
-          @endpoints
-        end
-
         def _api_request(endpoint, data = {}, request_options = {})
           path = Mustache.render(endpoint.path, data)
           url = [base_resource_url, path].join('/')
@@ -88,7 +74,7 @@ module AutomateApi
 
         def method_missing(name, *args)
           if supports?(name)
-            _api_request(endpoints[name], *args)
+            _api_request(endpoint(name), *args)
           else
             super
           end

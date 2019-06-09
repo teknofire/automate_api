@@ -4,7 +4,7 @@ require 'mustache'
 require "automate_api/version"
 require "automate_api/config"
 require "automate_api/helpers"
-require "automate_api/ui"
+require "automate_api/output"
 
 config_loaded = false
 configs = %w{ ./.a2_cli.rb ~/.a2_cli.rb }
@@ -35,11 +35,7 @@ module AutomateApi
       super "[#{request.code}:#{request.message} - #{method.upcase}] #{message}"
     end
   end
-  class EndpointNotSupported < StandardError
-    def initialize(endpoint, klass)
-      super "Undefined api endpoint '#{endpoint}' for #{klass}.endpoints"
-    end
-  end
+
   class Logger
     include AutomateApi::Output
   end

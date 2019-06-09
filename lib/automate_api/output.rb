@@ -4,18 +4,6 @@ module AutomateApi
       base.extend ClassMethods
     end
 
-    def info(*args)
-      self.class.info(*args)
-    end
-
-    def debug(*args)
-      self.class.debug(*args)
-    end
-
-    def error(*args)
-      self.class.error(*args)
-    end
-
     module ClassMethods
       def info(*msg)
         display 'info', *msg
