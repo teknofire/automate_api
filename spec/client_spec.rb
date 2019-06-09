@@ -14,6 +14,7 @@ describe AutomateApi::Client do
       response = double
       allow(response).to receive(:success?).and_return(true)
       allow(response).to receive(:code).and_return(200)
+      allow(response).to receive(:message).and_return('OK')
       allow(response).to receive(:parsed_response).and_return({ 'test' => "data" })
 
       response
@@ -31,6 +32,10 @@ describe AutomateApi::Client do
     it 'should get data' do
       expect(client.class).to receive(:get).with('/test', request_opts).and_return(response)
       expect(client.api_exec(:get, '/test')).to eq({ 'test' => "data" })
+    end
+
+    it 'should have a logger' do
+      expect(client.logger).to eq AutomateApi.logger
     end
   end
 end
