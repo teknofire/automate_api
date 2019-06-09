@@ -4,6 +4,7 @@ module AutomateApi
   class Client
     include HTTParty
     include AutomateApi::Output
+    
     base_uri AutomateApi::Config.automate_url
 
     def initialize

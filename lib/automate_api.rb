@@ -23,6 +23,7 @@ if !config_loaded
 end
 
 require "automate_api/client"
+require "automate_api/resource/endpoint"
 require "automate_api/resource/base"
 require "automate_api/resource/user"
 require "automate_api/resource/team"
@@ -30,9 +31,9 @@ require "automate_api/resource/team"
 module AutomateApi
   class Error < StandardError; end
   class RequestError < StandardError; end
-  class QueryNotSupported < StandardError
-    def initialize(query, klass)
-      super "Undefined api query '#{query}' for #{klass}.queries"
+  class EndpointNotSupported < StandardError
+    def initialize(endpoint, klass)
+      super "Undefined api endpoint '#{endpoint}' for #{klass}.endpoints"
     end
   end
   class Logger

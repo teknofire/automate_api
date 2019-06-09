@@ -1,18 +1,5 @@
 module AutomateApi
   module Resource
-    class Query < Hashie::Dash
-      # property :all
-      # property :fetch
-      property :path
-      property :collect
-      property :method, default: :get
-      property :klass, default: nil
-
-      def body?
-        [:post, :put].include?(method)
-      end
-    end
-
     class Base
       attr_reader :attributes
       def initialize(data)
@@ -23,7 +10,7 @@ module AutomateApi
         raise QueryNotSupported.new(:create, self.class) unless supports?(:create)
 
         options[:body] = attributes.to_json
-        response = self.class._api_request(self.class.queries['create'], attributes, options)
+        response = self.class._api_request(self.class.endpoints['create'], attributes, options)
         @attributes = response.attributes
         self
       end
@@ -33,7 +20,7 @@ module AutomateApi
 
         options[:body] = attributes.to_json
 
-        response = self.class._api_request(self.class.queries['update'], attributes, options)
+        response = self.class._api_request(self.class.endpoints['update'], attributes, options)
 
         @attributes = response.attributes
         self
@@ -43,7 +30,7 @@ module AutomateApi
         if supports?(name)
           options = args.extract_options!
           options[:body] = attributes.to_json
-          self.class._api_request(self.class.queries[name], attributes, options)
+          self.class._api_request(self.class.endpoints[name], attributes, options)
         elsif attributes.respond_to?(name)
           attributes.send(name, *args)
         else
@@ -51,13 +38,13 @@ module AutomateApi
         end
       end
 
-      def supports?(query)
-        self.class.supports?(query)
+      def supports?(endpoint)
+        self.class.supports?(endpoint)
       end
 
       class << self
-        def supports?(query)
-          queries.has_key?(query)
+        def supports?(endpoint)
+        endpoints.has_key?(endpoint)
         end
 
         def build(data)
@@ -78,32 +65,32 @@ module AutomateApi
           @fields
         end
 
-        def queries(args = nil)
-          @queries ||= Hashie::Mash.new
+        def endpoints(args = nil)
+          @endpoints ||= Hashie::Mash.new
 
           args.each_pair do |name, config|
-            @queries[name] = Query.new(config)
+            @endpoints[name] = Endpoint.new(config)
           end unless args.nil?
 
-          @queries
+          @endpoints
         end
 
-        def _api_request(query, data = {}, request_options = {})
-          path = Mustache.render(query.path, data)
+        def _api_request(endpoint, data = {}, request_options = {})
+          path = Mustache.render(endpoint.path, data)
           url = [base_resource_url, path].join('/')
 
-          response = AutomateApi.client.api_exec(query.method, url, request_options)
+          response = AutomateApi.client.api_exec(endpoint.method, url, request_options)
 
-          if response.collectable?(query.collect)
-            coerce response[query.collect], query.klass || self
+          if response.collectable?(endpoint.collect)
+            coerce response[endpoint.collect], endpoint.klass || self
           else
-            coerce response, query.klass || self
+            coerce response, endpoint.klass || self
           end
         end
 
         def method_missing(name, *args)
           if supports?(name)
-            _api_request(queries[name], *args)
+            _api_request(endpoints[name], *args)
           else
             super
           end

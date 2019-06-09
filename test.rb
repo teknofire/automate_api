@@ -3,14 +3,28 @@ require 'securerandom'
 
 AutomateApi::Config.debug = true
 
-puts users = AutomateApi::Resource::User.all
-puts admin = AutomateApi::Resource::User.fetch(username: 'admin')
+users = AutomateApi::Resource::User.all
+admin = AutomateApi::Resource::User.fetch(username: 'admin')
 # data = Hashie::Mash.new()
-puts newuser = AutomateApi::Resource::User.create(name: 'New user', username: "testtest#{rand(100)}", password: SecureRandom.hex(10))
-puts "Update user"
+newuser = AutomateApi::Resource::User.create(name: 'New user', username: "testtest#{rand(100)}", password: SecureRandom.hex(10))
+AutomateApi.logger.info "Update user"
 newuser.name = 'Updated user'
 newuser.update
-puts "Fetch updated user"
+AutomateApi.logger.info "Fetch updated user"
 testuser = AutomateApi::Resource::User.fetch(username: newuser.username)
-puts "Updated user: #{testuser.username} - #{testuser.name}"
+AutomateApi.logger.info "Updated user: #{testuser.username} - #{testuser.name}"
 newuser.destroy
+
+begin
+team = AutomateApi::Resource::Team.create(name: 'test-team', description: "testing teams")
+rescue => e
+  AutomateApi.logger.error e.message
+end
+teams = AutomateApi::Resource::Team.all
+teams.each do |team|
+  puts team.name
+  AutomateApi.logger.info team.users.inspect
+  next if team.name == 'admins'
+  AutomateApi.logger.info "Deleting #{team.name}"
+  team.destroy
+end
