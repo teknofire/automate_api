@@ -1,6 +1,6 @@
 # AutomateApi
 
-This is a quick and dirty ruby api client for the Automate v2 API
+This is a quick and dirty ruby api client for the [Chef](https://chef.io) [Automate](https://automate.chef.io) v2 API
 
 ## Installation
 
