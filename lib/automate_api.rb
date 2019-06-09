@@ -24,9 +24,11 @@ end
 
 require "automate_api/client"
 require "automate_api/resource/endpoint"
+require "automate_api/resource/attributes"
 require "automate_api/resource/base"
-require "automate_api/resource/user"
-require "automate_api/resource/team"
+require "automate_api/models/user"
+require "automate_api/models/team"
+require "automate_api/models/token"
 
 module AutomateApi
   class Error < StandardError; end

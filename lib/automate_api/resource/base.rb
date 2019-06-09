@@ -5,7 +5,7 @@ module AutomateApi
       include AutomateApi::Resource::EndpointAddon
 
       def initialize(data)
-        @attributes = Hashie::Mash.new(data)
+        @attributes = Attributes.new(data)
       end
 
       def create(options = {})

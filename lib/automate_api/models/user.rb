@@ -1,5 +1,5 @@
 module AutomateApi
-  module Resource
+  module Models
     class User < AutomateApi::Resource::Base
       fields :id, :name, :username, :email, :password
       endpoints all: { path: 'auth/users', collect: 'users' },

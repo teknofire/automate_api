@@ -14,6 +14,10 @@ module AutomateApi
       end
     end
 
+    class EndpointCollection < Hashie::Mash
+      disable_warnings
+    end
+
     module EndpointAddon
       def self.included(base)
         base.extend ClassMethods
@@ -42,7 +46,7 @@ module AutomateApi
         end
 
         def endpoints(args = nil)
-          @endpoints ||= Hashie::Mash.new
+          @endpoints ||= EndpointCollection.new
 
           args.each_pair do |name, config|
             @endpoints[name] = Endpoint.new(config)
