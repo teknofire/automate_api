@@ -1,15 +1,13 @@
 # AutomateApi
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/automate_api`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+This is a quick and dirty ruby api client for the Automate v2 API
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'automate_api'
+gem 'automate_api', github: 'teknofire/automate_api'
 ```
 
 And then execute:
@@ -22,7 +20,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Checkout the `examples` directory for how to use the various resource models.
 
 ## Development
 
@@ -32,4 +30,4 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/automate_api.
+Bug reports and pull requests are welcome on GitHub at https://github.com/teknofire/automate_api.
