@@ -4,15 +4,19 @@ module AutomateApi
   class Client
     include HTTParty
     include AutomateApi::Output
-    
+
     base_uri AutomateApi::Config.automate_url
-
-    def initialize
-
-    end
 
     def logger
       AutomateApi.logger
+    end
+
+    def reload
+      base_uri(AutomateApi::Config.automate_url)
+    end
+
+    def base_uri(uri = nil)
+      self.class.base_uri(uri)
     end
 
     def api_exec(method, path, options = {})
@@ -21,6 +25,7 @@ module AutomateApi
 
       logger.debug <<~EOF
         API Request:
+          Url: #{self.class.base_uri}
           Path: #{path}
           Method: #{method}
           Options: #{opts.inspect}
@@ -33,7 +38,7 @@ module AutomateApi
       if request.success?
         data
       else
-        raise RequestError.new("[#{request.code}:#{request.response.message} - #{method.upcase}] #{data.error}")
+        raise RequestError.new(request, method, data.error)
       end
     end
 

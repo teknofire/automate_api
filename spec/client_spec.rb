@@ -37,5 +37,12 @@ describe AutomateApi::Client do
     it 'should have a logger' do
       expect(client.logger).to eq AutomateApi.logger
     end
+
+    it 'should reload base_uri from config' do
+      AutomateApi::Config.automate_url = 'https://bad.test'
+      AutomateApi.client.reload
+
+      expect(AutomateApi.client.base_uri).to eq 'https://bad.test'
+    end
   end
 end

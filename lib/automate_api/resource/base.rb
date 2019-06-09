@@ -7,20 +7,18 @@ module AutomateApi
       end
 
       def create(options = {})
-        raise QueryNotSupported.new(:create, self.class) unless supports?(:create)
-
-        options[:body] = attributes.to_json
-        response = self.class._api_request(self.class.endpoints['create'], attributes, options)
-        @attributes = response.attributes
-        self
+        raise EndpointNotSupported.new(:create, self.class) unless supports?(:create)
+        _api_request(self.class.endpoints['create'], options)
       end
 
       def update(options = {})
-        raise QueryNotSupported.new(:update, self.class) unless supports?(:update)
+        raise EndpointNotSupported.new(:update, self.class) unless supports?(:update)
+        _api_request(self.class.endpoints['update'], options)
+      end
 
+      def _api_request(endpoint, options = {})
         options[:body] = attributes.to_json
-
-        response = self.class._api_request(self.class.endpoints['update'], attributes, options)
+        response = self.class._api_request(endpoint, attributes, options)
 
         @attributes = response.attributes
         self
@@ -29,8 +27,7 @@ module AutomateApi
       def method_missing(name, *args)
         if supports?(name)
           options = args.extract_options!
-          options[:body] = attributes.to_json
-          self.class._api_request(self.class.endpoints[name], attributes, options)
+          _api_request(self.class.endpoints[name], options)
         elsif attributes.respond_to?(name)
           attributes.send(name, *args)
         else
@@ -57,7 +54,12 @@ module AutomateApi
         end
 
         def base_resource_url
-          "/api/v0/auth"
+          "/api/#{api_version}"
+        end
+
+        def api_version(version = nil)
+          @api_version = version unless version.nil?
+          @api_version || 'v0'
         end
 
         def fields(*fields)

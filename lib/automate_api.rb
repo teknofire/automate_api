@@ -30,7 +30,11 @@ require "automate_api/resource/team"
 
 module AutomateApi
   class Error < StandardError; end
-  class RequestError < StandardError; end
+  class RequestError < StandardError;
+    def initialize(request, method, message)
+      super "[#{request.code}:#{request.message} - #{method.upcase}] #{message}"
+    end
+  end
   class EndpointNotSupported < StandardError
     def initialize(endpoint, klass)
       super "Undefined api endpoint '#{endpoint}' for #{klass}.endpoints"

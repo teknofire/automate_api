@@ -2,11 +2,11 @@ module AutomateApi
   module Resource
     class User < AutomateApi::Resource::Base
       fields :id, :name, :username, :email, :password
-      endpoints all: { path: 'users', collect: 'users' },
-                fetch: { path: 'users/{{username}}' },
-                create: { path: 'users', method: 'post' },
-                destroy: { path: 'users/{{username}}', collect: 'user', method: 'delete' },
-                update: { path: 'users/{{username}}', collect: 'user', method: 'put' }
+      endpoints all: { path: 'auth/users', collect: 'users' },
+                fetch: { path: 'auth/users/{{username}}' },
+                create: { path: 'auth/users', method: 'post' },
+                destroy: { path: 'auth/users/{{username}}', collect: 'user', method: 'delete' },
+                update: { path: 'auth/users/{{username}}', collect: 'user', method: 'put' }
     end
   end
 end
