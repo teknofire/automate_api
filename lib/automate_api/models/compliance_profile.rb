@@ -1,3 +1,29 @@
+##
+# ComplianceProfiles
+#
+# Endpoints:
+# * search - returns a list of compliance profiles based on the provided filters
+#     Available search filters
+#     {
+#       "filters": [
+#         {
+#           "values": [
+#             "string"
+#           ],
+#           "type": "string"
+#         }
+#       ],
+#       "order": "ASC",
+#       "sort": "string",
+#       "page": 0,
+#       "per_page": 0,
+#       "owner": "string",
+#       "name": "string",
+#       "version": "string"
+#     }
+#   TODO: Figure out a method to document and handle this, probably use the swagger
+# * fetch - Will fetch a single compliance profile based owner, name and version provided.
+##
 module AutomateApi
   module Models
     class ComplianceProfile < AutomateApi::Resource::Base
