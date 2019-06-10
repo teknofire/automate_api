@@ -20,7 +20,7 @@ module AutomateApi
     #     "page": 0,
     #     "per_page": 0
     #   }
-    class Node < AutomateApi::Resource::Base
+    class ComplianceNode < AutomateApi::Resource::Base
       fields :id, :name, :platform, :platform_version, :manager, :tags, :last_contact,
              :status, :last_job, :target_config, :connection_error, :state, :projects
 
