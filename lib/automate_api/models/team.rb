@@ -1,3 +1,14 @@
+##
+# Team - Access to team info included a list of member users
+#
+# Endpoint methods:
+# * all      - Returns a list of all teams
+# * fetch    - Fetch a single team based on id
+# * create   - Create a new team
+# * destroy  - Destroy a team based on id
+# * update   - Update a team based on id
+# * users    - Fetch a list of users who are members of the teams
+## 
 module AutomateApi
   module Models
     class TeamUsers
