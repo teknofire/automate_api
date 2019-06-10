@@ -34,7 +34,14 @@ module AutomateApi
           Data: #{request.parsed_response}
       EOF
 
-      data = Hashie::Mash.new(request.parsed_response)
+      data = if request.parsed_response.is_a?(Array)
+        request.parsed_response.map do |item|
+          Hashie::Mash.new(item)
+        end
+      else
+        Hashie::Mash.new(request.parsed_response)
+      end
+
       if request.success?
         data
       else
