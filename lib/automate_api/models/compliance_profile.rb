@@ -23,6 +23,7 @@
 #     }
 #   TODO: Figure out a method to document and handle this, probably use the swagger
 # * fetch - Will fetch a single compliance profile based owner, name and version provided.
+# * delete - Delete the profile from Automate based on owner, name and version
 ##
 module AutomateApi
   module Models
@@ -31,7 +32,8 @@ module AutomateApi
              :summary, :version, :owner, :supports, :depends, :sha256, :groups
 
       endpoints search: { path: 'compliance/profiles/search', method: :post, collect: :profiles },
-                fetch: { path: '/compliance/profiles/read/{{owner}}/{{name}}/version/{{version}}' }
+                fetch: { path: '/compliance/profiles/read/{{owner}}/{{name}}/version/{{version}}' },
+                delete: { path: '/compliance/profiles/{{owner}}/{{name}}/version/{{version}}', method: :delete }
     end
   end
 end
