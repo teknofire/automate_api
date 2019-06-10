@@ -69,6 +69,7 @@ require "automate_api/models/team"
 require "automate_api/models/token"
 require "automate_api/models/compliance_profile"
 require "automate_api/models/compliance_node"
+require "automate_api/models/compliance_report"
 require "automate_api/models/node"
 require "automate_api/models/node_run"
 
