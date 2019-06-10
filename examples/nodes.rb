@@ -20,7 +20,7 @@ Node: #{node.name}
  Last checkin: #{node.checkin}
   EOF
 
-  runs = node.runs.all
+  runs = node.runs
   next if runs.empty?
 
   puts "" #intentional blank line
