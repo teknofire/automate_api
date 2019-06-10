@@ -1,5 +1,5 @@
 require 'automate_api'
-AutomateApi::Config.debug = true
+# AutomateApi::Config.debug = true
 logger = AutomateApi.logger
 
 # logger.info 'Fetching nodes'
