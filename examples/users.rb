@@ -5,6 +5,18 @@ require 'securerandom'
 logger = AutomateApi.logger
 
 users = AutomateApi::Models::User.all
+
+format = "%-15s %s"
+logger.info "User list"
+
+puts format % ['Username', 'Name']
+puts '-'*80
+users.each do |user|
+  puts format % [user.username, user.name]
+end
+# blank line added intentionally
+puts ""
+
 admin = AutomateApi::Models::User.fetch(username: 'admin')
 newuser = AutomateApi::Models::User.create(name: 'New user', username: "testtest#{rand(100)}", password: SecureRandom.hex(10))
 

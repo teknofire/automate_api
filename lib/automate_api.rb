@@ -68,5 +68,6 @@ require "automate_api/models/user"
 require "automate_api/models/team"
 require "automate_api/models/token"
 require "automate_api/models/compliance_profile"
+require "automate_api/models/node"
 
 AutomateApi.configure

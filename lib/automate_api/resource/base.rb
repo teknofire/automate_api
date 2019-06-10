@@ -43,6 +43,10 @@ module AutomateApi
         @persisted = true
       end
 
+      def to_json(*args)
+        attributes.to_json(*args)
+      end
+
       def _api_request(endpoint, options = {})
         response = self.class._api_request(endpoint, attributes, options)
 
