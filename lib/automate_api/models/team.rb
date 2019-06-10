@@ -8,11 +8,11 @@
 # * destroy  - Destroy a team based on id
 # * update   - Update a team based on id
 # * users    - Fetch a list of users who are members of the teams
-## 
+##
 module AutomateApi
   module Models
     class TeamUsers
-      def self.initialize_or_find(user_id)
+      def self.initialize_or_find(user_id, persisted = false)
         User.all.select { |u| u.id == user_id }.first
       end
     end
