@@ -68,7 +68,7 @@ describe AutomateApi::Resource::Base do
         expect(AutomateApi::Client).to receive(:post)
           .with('/api/v0/foo', request_opts).and_return(fail_response)
 
-        expect{ TestResource.foo }.to raise_error(AutomateApi::RequestError)
+        expect{ TestResource.foo }.to raise_error(AutomateApi::ResponseError)
       end
 
       it 'should raise method not found error' do
@@ -118,6 +118,35 @@ describe AutomateApi::Resource::Base do
     context 'instance methods' do
       let(:instance) { TestResource.new({ name: 'test' }) }
 
+      it 'should call create if not persisted already' do
+        item = TestResource.new
+        expect(item).to receive(:create).and_return true
+        item.save
+      end
+
+      it 'should call update if not persisted already' do
+        item = TestResource.new({ name: 'box' }, true)
+        expect(item).to receive(:update).and_return true
+        item.save
+      end
+
+      it 'should raise an error if not persisted and update is called' do
+        class UpdateResource < AutomateApi::Resource::Base
+          endpoints update: { path: '/update', method: 'put' }
+        end
+        item = UpdateResource.new
+        expect { item.update }.to raise_error AutomateApi::RequestError
+      end
+
+      it 'should raise an error if persisted and create is called' do
+        class CreateResource < AutomateApi::Resource::Base
+          endpoints create: { path: '/create', method: 'post' }
+        end
+        item = CreateResource.new({}, true)
+        expect { item.create }.to raise_error AutomateApi::RequestError
+      end
+
+
       it 'should support create endpoint' do
         expect(instance.supports?(:create)).to eq true
       end
@@ -137,7 +166,7 @@ describe AutomateApi::Resource::Base do
 
       it 'should raise error on failed create' do
         expect(AutomateApi::Client).to receive(:post).and_return(fail_response)
-        expect{ instance.create }.to raise_error(AutomateApi::RequestError)
+        expect{ instance.create }.to raise_error(AutomateApi::ResponseError)
       end
 
       it 'should not raise error on method_missing request' do
@@ -159,7 +188,7 @@ describe AutomateApi::Resource::Base do
         expect(AutomateApi::Client).to receive(:post)
           .with('/api/v0/foo', opts).and_return(fail_response)
 
-        expect{ instance.foo }.to raise_error(AutomateApi::RequestError)
+        expect{ instance.foo }.to raise_error(AutomateApi::ResponseError)
       end
 
       it 'should return the value of an attribute' do

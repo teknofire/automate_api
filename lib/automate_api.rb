@@ -14,11 +14,12 @@ require "automate_api/resource/base"
 
 module AutomateApi
   class Error < StandardError; end
-  class RequestError < StandardError;
+  class ResponseError < StandardError
     def initialize(request, method, message)
       super "[#{request.code}:#{request.message} - #{method.upcase}] #{message}"
     end
   end
+  class RequestError < StandardError; end
 
   class Logger
     include AutomateApi::Output

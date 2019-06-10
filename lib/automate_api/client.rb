@@ -38,7 +38,7 @@ module AutomateApi
       if request.success?
         data
       else
-        raise RequestError.new(request, method, data.error)
+        raise ResponseError.new(request, method, data.error)
       end
     end
 
