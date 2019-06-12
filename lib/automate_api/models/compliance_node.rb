@@ -26,7 +26,7 @@ module AutomateApi
 
       endpoints search: { path: 'nodes/search', collect: 'nodes', method: 'post' },
                 fetch: { path: 'nodes/id/{{id}}' },
-                create: { path: 'nodes', method: 'post' },
+                bulk_create: { path: 'nodes/bulk-create', collect: 'ids', method: 'post' },
                 destroy: { path: 'nodes/id/{{id}}', method: 'delete' },
                 update: { path: 'nodes/id/{{id}}', method: 'put' }
     end
