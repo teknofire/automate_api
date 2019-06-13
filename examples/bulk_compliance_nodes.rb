@@ -34,6 +34,9 @@ bulk_nodes = []
 end
 
 logger.info "Creating #{bulk_nodes.length} nodes"
+# Uncomment to actually create the nodes as this will create multiple nodes with
+# the same name if run multiple times
+#
 # created = AutomateApi::Models::ComplianceNode.bulk_create(
 #   nodes: bulk_nodes
 # )
