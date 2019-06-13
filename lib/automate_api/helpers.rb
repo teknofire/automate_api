@@ -21,3 +21,7 @@ class Hash
     !field.nil? && has_key?(field)
   end
 end
+
+class AutomateApi::Mash < Hashie::Mash
+  disable_warnings
+end

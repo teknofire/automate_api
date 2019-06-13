@@ -34,6 +34,14 @@ module AutomateApi
       endpoints search: { path: 'compliance/profiles/search', method: :post, collect: :profiles },
                 fetch: { path: '/compliance/profiles/read/{{owner}}/{{name}}/version/{{version}}' },
                 delete: { path: '/compliance/profiles/{{owner}}/{{name}}/version/{{version}}', method: :delete }
+
+      def self.owned_by(owner)
+        search({ owner: owner })
+      end
+
+      def slug
+        "compliance://#{owner}/#{name}##{version}"
+      end
     end
   end
 end
