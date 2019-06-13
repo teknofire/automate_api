@@ -1,7 +1,7 @@
 require 'automate_api'
 require 'securerandom'
 
-AutomateApi::Config.debug = true
+# AutomateApi::Config.debug = true
 logger = AutomateApi.logger
 
 logger.info 'Fetching secrets'

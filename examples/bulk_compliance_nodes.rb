@@ -17,23 +17,23 @@ bulk_nodes = []
 
 20.times do |i|
   bulk_nodes << {
-    name: "testnode-#{i}", manager: 'automate',
+    name: "testnode-#{i}",
+    manager: 'automate',
     target_config: {
       hosts: ["testnode-#{i}"],
-      backend: 'ssh', secrets: [secret.id],
-      port: 22, sudo: true
+      backend: 'ssh',
+      secrets: [secret.id],
+      port: 22,
+      sudo: true
     },
-    tags: [{
-      key: 'name',
-      value: 'bag'
-    },{
-      key: 'test',
-      value: 'box'
-    }]
+    tags: [
+      { key: 'name', value: 'bag' },
+      { key: 'test', value: 'box' }
+    ]
   }
 end
 
 logger.info "Creating #{bulk_nodes.length} nodes"
-created = AutomateApi::Models::ComplianceNode.bulk_create(
-  nodes: bulk_nodes
-)
+# created = AutomateApi::Models::ComplianceNode.bulk_create(
+#   nodes: bulk_nodes
+# )

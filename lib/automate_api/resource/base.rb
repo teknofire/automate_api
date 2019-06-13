@@ -90,7 +90,7 @@ module AutomateApi
         # @return [String] api version used for requests, default: v0
         def api_version(version = nil)
           @api_version = version unless version.nil?
-          @api_version || 'v0'
+          @api_version || 'v1'
         end
 
 
