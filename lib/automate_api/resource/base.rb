@@ -1,3 +1,6 @@
+require 'yaml'
+require 'json'
+
 module AutomateApi
   module Resource
     class Base
@@ -47,10 +50,14 @@ module AutomateApi
         attributes.to_json(*args)
       end
 
+      def to_yaml(*args)
+        attributes.to_hash.to_yaml(*args)
+      end
+
       def _api_request(endpoint, options = {})
         response = self.class._api_request(endpoint, attributes, options)
 
-        if response.respond_to?(:attributes)
+        if response.respond_to?(:attributes) and !response.attributes.empty?
           @attributes = response.attributes
           @persisted = true
         end

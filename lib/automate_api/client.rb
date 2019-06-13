@@ -36,10 +36,10 @@ module AutomateApi
 
       data = if request.parsed_response.is_a?(Array)
         request.parsed_response.map do |item|
-          Hashie::Mash.new(item)
+          Mash.new(item)
         end
       else
-        Hashie::Mash.new(request.parsed_response)
+        Mash.new(request.parsed_response)
       end
 
       if request.success?
