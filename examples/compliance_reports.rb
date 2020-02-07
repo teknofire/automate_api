@@ -12,7 +12,7 @@ reports = AutomateApi::Models::ComplianceReport.all
 # puts format % ['Name', "Status", "Checkin", "Environment"]
 
 reports.each do |report|
-  puts <<~EOF
+  STDERR.puts <<~EOF
 ==========================================
 Report for: #{report.node_name}
 ==========================================
@@ -22,3 +22,7 @@ Report for: #{report.node_name}
    Controls: #{report.controls.to_hash.to_yaml.gsub("\n", "\n     ")}
   EOF
 end
+
+report = reports.first
+
+puts report.to_json
