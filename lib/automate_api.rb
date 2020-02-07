@@ -75,5 +75,6 @@ require "automate_api/models/node_run"
 require "automate_api/models/node_manager"
 require "automate_api/models/secret"
 require "automate_api/models/scan_job"
+require "automate_api/models/iamv1_policy"
 
 AutomateApi.configure
