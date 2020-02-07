@@ -25,6 +25,11 @@ module AutomateApi
     include AutomateApi::Output
   end
 
+  def self.setup(**opts)
+    AutomateApi::Config.from_hash(opts)
+    client.reload
+  end
+
   def self.client
     @client ||= Client.new
   end
@@ -37,19 +42,16 @@ module AutomateApi
     @logger = value
   end
 
-  def self.configure(config = nil)
+  def self.load_config(config = %w{ ./.automate_api.rb ~/.automate_api.rb })
     config_loaded = false
 
-    if config.nil?
-      configs = %w{ ./.a2_cli.rb ~/.a2_cli.rb }
-    else
-      configs = [config]
-    end
+    # make sure it's an Array
+    config = Array(config)
 
-    configs.each do |config|
-      config = File.expand_path(config)
-      if File.exist?(config)
-        AutomateApi::Config.from_file(config)
+    config.each do |config_file|
+      c = File.expand_path(config_file)
+      if File.exist?(c)
+        AutomateApi::Config.from_file(c)
         config_loaded = true
         break
       end
@@ -76,4 +78,4 @@ require "automate_api/models/node_manager"
 require "automate_api/models/secret"
 require "automate_api/models/scan_job"
 
-AutomateApi.configure
+# AutomateApi.load_config

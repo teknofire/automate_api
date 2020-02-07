@@ -22,8 +22,8 @@ RSpec.configure do |config|
   config.before(:all) do
     AutomateApi::Config.reset
     AutomateApi::Config.ssl_verify = false
-    AutomateApi::Config.automate_url = 'https://test.test'
-    AutomateApi::Config.auth_token = 'test_token'
+    AutomateApi::Config.url = 'https://test.test'
+    AutomateApi::Config.token = 'test_token'
   end
 
   # rspec-expectations config goes here. You can use an alternate

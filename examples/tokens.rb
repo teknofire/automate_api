@@ -1,4 +1,8 @@
 require 'automate_api'
+
+# auto-load config
+AutomateApi.load_config
+
 # AutomateApi::Config.debug = true
 logger = AutomateApi.logger
 

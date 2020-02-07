@@ -1,6 +1,9 @@
 require 'automate_api'
 require 'securerandom'
 
+# auto-load config
+AutomateApi.load_config
+
 # AutomateApi::Config.debug = true
 logger = AutomateApi.logger
 
@@ -28,6 +31,7 @@ logger.info "Fetch updated user"
 testuser = AutomateApi::Models::User.fetch(username: newuser.username)
 
 logger.info "Updated user: #{testuser.username} - #{testuser.name}"
+logger.info "Deleting #{newuser.username}"
 newuser.destroy
 
 #clean up
