@@ -10,14 +10,13 @@ cd automate_api
 bundle
 ```
 
-
 ## Usage
 
 Checkout the [examples](tree/master/examples) directory for how to use the various resource models.
 
 To run the examples you will need to create a config file with the following content.
 
-Save this as `~/.a2_cli.rb`
+Save this as `.automate_api.rb`
 ```
 url "https://A2_SERVER_HOSTNAME"
 token "A2_ADMIN_TOKEN"
