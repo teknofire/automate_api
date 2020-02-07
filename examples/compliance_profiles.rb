@@ -1,4 +1,8 @@
 require 'automate_api'
+
+# auto-load config
+AutomateApi.load_config
+
 # AutomateApi::Config.debug = true
 logger = AutomateApi.logger
 
@@ -44,12 +48,14 @@ end
 # figure out an example profile to access
 p = profiles.first
 
-profile = AutomateApi::Models::ComplianceProfile.fetch(owner: p.owner, name: p.name, version: p.version)
-logger.info <<-EOF
-Profile information
------------------------------
-Title: #{profile.title}
-Summary: #{profile.summary}
-Copyright: #{profile.copyright}
-SHA256: #{profile.sha256}
-EOF
+unless p.nil?
+  profile = AutomateApi::Models::ComplianceProfile.fetch(owner: p.owner, name: p.name, version: p.version)
+  logger.info <<-EOF
+  Profile information
+  -----------------------------
+  Title: #{profile.title}
+  Summary: #{profile.summary}
+  Copyright: #{profile.copyright}
+  SHA256: #{profile.sha256}
+  EOF
+end

@@ -1,6 +1,9 @@
 require 'automate_api'
 require 'yaml'
 
+# auto-load config
+AutomateApi.load_config
+
 # AutomateApi::Config.debug = true
 logger = AutomateApi.logger
 

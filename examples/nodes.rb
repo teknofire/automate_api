@@ -1,4 +1,8 @@
 require 'automate_api'
+
+# auto-load config
+AutomateApi.load_config
+
 # AutomateApi::Config.debug = true
 logger = AutomateApi.logger
 
@@ -14,7 +18,7 @@ nodes.each do |node|
 ==========================================
 Node: #{node.name}
 ==========================================
-         FQDN: #{node.fqdn}
+         FQDN: #{"node.fqdn"}
   Environment: #{node.environment}
        Status: #{node.status}
  Last checkin: #{node.checkin}
