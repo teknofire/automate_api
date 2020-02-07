@@ -5,14 +5,14 @@ module AutomateApi
     include HTTParty
     include AutomateApi::Output
 
-    base_uri AutomateApi::Config.automate_url
+    base_uri AutomateApi::Config.url
 
     def logger
       AutomateApi.logger
     end
 
     def reload
-      base_uri(AutomateApi::Config.automate_url)
+      base_uri(AutomateApi::Config.url)
     end
 
     def base_uri(uri = nil)
@@ -53,7 +53,7 @@ module AutomateApi
       {
         verify: AutomateApi::Config.ssl_verify,
         headers: {
-          "api-token" => AutomateApi::Config.auth_token,
+          "api-token" => AutomateApi::Config.token,
           "content-type" => "application/json"
         }
       }

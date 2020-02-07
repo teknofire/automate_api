@@ -19,8 +19,8 @@ To run the examples you will need to create a config file with the following con
 
 Save this as `~/.a2_cli.rb`
 ```
-automate_url "https://A2_SERVER_HOSTNAME"
-auth_token "A2_ADMIN_TOKEN"
+url "https://A2_SERVER_HOSTNAME"
+token "A2_ADMIN_TOKEN"
 ssl_verify false
 ```
 

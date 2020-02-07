@@ -25,6 +25,11 @@ module AutomateApi
     include AutomateApi::Output
   end
 
+  def self.setup(**opts)
+    AutomateApi::Config.from_hash(opts)
+    client.reload
+  end
+
   def self.client
     @client ||= Client.new
   end
@@ -41,7 +46,7 @@ module AutomateApi
     config_loaded = false
 
     if config.nil?
-      configs = %w{ ./.a2_cli.rb ~/.a2_cli.rb }
+      configs = %w{ ./.automate_api.rb ~/.automate_api.rb }
     else
       configs = [config]
     end

@@ -32,7 +32,7 @@ describe AutomateApi::Client do
     end
 
     it 'should reload base_uri from config' do
-      AutomateApi::Config.automate_url = 'https://bad.test'
+      AutomateApi::Config.url = 'https://bad.test'
       AutomateApi.client.reload
 
       expect(AutomateApi.client.base_uri).to eq 'https://bad.test'
